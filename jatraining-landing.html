@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JATRAINING — Entrenamiento Online de Ciclismo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #161616;
+    --border: #222222;
+    --white: #f5f5f0;
+    --muted: #888888;
+    --accent: #e8ff00;
+    --accent2: #ff4500;
+    --red: #cc2200;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .logo span { color: var(--white); }
+  nav a.cta-nav {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--accent);
+    padding: 0.55rem 1.4rem;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  nav a.cta-nav:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 6rem 5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 2.5rem;
+    height: 2px;
+    background: var(--accent);
+  }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3.5rem, 6vw, 6.5rem);
+    line-height: 0.92;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.8rem;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+    display: block;
+  }
+  .hero-sub {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #aaaaaa;
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+  .btn-primary {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--accent);
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-self: flex-start;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(232,255,0,0.3);
+  }
+  .btn-primary::after {
+    content: '→';
+    margin-left: 0.6rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .stat-item strong {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 2.2rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-item span {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .hero-right {
+    position: relative;
+    background: var(--dark);
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 60% 40%, rgba(232,255,0,0.06) 0%, transparent 70%),
+      repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.015) 40px,
+        rgba(255,255,255,0.015) 41px
+      );
+    z-index: 1;
+  }
+  .hero-visual {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .power-meter {
+    width: 300px;
+    text-align: center;
+  }
+  .watt-display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 7rem;
+    line-height: 1;
+    color: var(--accent);
+    text-shadow: 0 0 60px rgba(232,255,0,0.4);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .watt-unit {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+  .progress-bars {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    text-align: left;
+  }
+  .pbar-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .pbar-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  .pbar-label span { color: var(--white); }
+  .pbar-track {
+    height: 3px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .pbar-fill {
+    height: 100%;
+    background: var(--accent);
+    animation: fill-bar 2s ease forwards;
+    width: 0;
+  }
+
+  @keyframes fill-bar { to { width: var(--w); } }
+  @keyframes pulse {
+    0%, 100% { text-shadow: 0 0 60px rgba(232,255,0,0.4); }
+    50% { text-shadow: 0 0 100px rgba(232,255,0,0.7); }
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── PROBLEM ── */
+  #problem {
+    padding: 7rem 5rem;
+    background: var(--dark);
+    position: relative;
+  }
+  #problem::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+  .section-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    text-transform: uppercase;
+    line-height: 0.95;
+    margin-bottom: 1rem;
+  }
+  .section-title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-top: 4rem;
+    align-items: start;
+  }
+  .problem-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .problem-item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    padding: 1.5rem;
+    background: var(--card);
+    border-left: 3px solid var(--accent2);
+    position: relative;
+    overflow: hidden;
+  }
+  .problem-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,69,0,0.05) 0%, transparent 60%);
+  }
+  .problem-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .problem-item p {
+    font-size: 0.95rem;
+    color: #aaa;
+    line-height: 1.6;
+  }
+  .problem-item p strong {
+    display: block;
+    color: var(--white);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
+  }
+  .problem-quote {
+    padding: 3rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .problem-quote::before {
+    content: '"';
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8rem;
+    font-weight: 900;
+    color: var(--accent);
+    opacity: 0.15;
+    position: absolute;
+    top: -1rem;
+    left: 1.5rem;
+    line-height: 1;
+  }
+  .problem-quote blockquote {
+    font-size: 1.35rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .problem-quote cite {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-style: normal;
+  }
+  .problem-quote cite strong {
+    color: var(--accent);
+  }
+
+  /* ── SOLUTION ── */
+  #solution {
+    padding: 7rem 5rem;
+    background: var(--black);
+  }
+  .solution-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+  .sol-card {
+    padding: 2.5rem 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .sol-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+  .sol-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .sol-card:hover::before { transform: scaleX(1); }
+  .sol-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: rgba(232,255,0,0.08);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .sol-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(232,255,0,0.1);
+    border: 1px solid rgba(232,255,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .sol-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.8rem;
+    color: var(--white);
+  }
+  .sol-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .sol-card p strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ── PROOF ── */
+  #proof {
+    padding: 7rem 5rem;
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+  }
+  #proof::before {
+    content: 'RESULTADOS';
+    position: absolute;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 15rem;
+    color: rgba(232,255,0,0.02);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .proof-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 4rem;
+  }
+  .case-study {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 4rem;
+    position: relative;
+    z-index: 1;
+  }
+  .case-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+  .case-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .case-story {
+    font-size: 0.95rem;
+    color: #aaa;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  .case-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .metric-box {
+    padding: 1.5rem;
+    background: var(--black);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .metric-before {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .metric-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .metric-value.accent { color: var(--accent); }
+  .metric-value.muted { color: #555; }
+  .metric-delta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #4caf50;
+    margin-top: 0.2rem;
+  }
+  .metric-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+  .case-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .progress-chart {
+    background: var(--black);
+    border: 1px solid var(--border);
+    padding: 2rem;
+  }
+  .chart-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    height: 100px;
+  }
+  .chart-bar {
+    flex: 1;
+    background: rgba(232,255,0,0.15);
+    border-top: 2px solid var(--accent);
+    position: relative;
+    transition: height 1s ease;
+  }
+  .chart-bar:last-child { background: rgba(232,255,0,0.4); }
+  .chart-bar span {
+    position: absolute;
+    bottom: -1.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── OFFER ── */
+  #offer {
+    padding: 7rem 5rem;
+    background: var(--black);
+  }
+  .offer-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 3rem;
+    margin-top: 4rem;
+    align-items: start;
+  }
+  .offer-includes {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .offer-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .offer-item:first-child { padding-top: 0; }
+  .offer-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.55rem;
+  }
+  .offer-item-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+  .offer-item-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .offer-cta-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 3rem 2.5rem;
+    position: sticky;
+    top: 7rem;
+  }
+  .offer-cta-box h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .offer-cta-box p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  .offer-cta-box .price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 3.5rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .offer-cta-box .price-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .btn-cta-box {
+    display: block;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--accent);
+    padding: 1.1rem 2rem;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-bottom: 1rem;
+  }
+  .btn-cta-box:hover { opacity: 0.85; transform: translateY(-2px); }
+  .offer-note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* ── FAQ ── */
+  #faq {
+    padding: 7rem 5rem;
+    background: var(--dark);
+  }
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+  .faq-item {
+    padding: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .faq-item:hover { border-color: rgba(232,255,0,0.3); }
+  .faq-q {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .faq-q::after {
+    content: '+';
+    font-size: 1.3rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .faq-a {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── FINAL CTA ── */
+  #final-cta {
+    padding: 8rem 5rem;
+    background: var(--black);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,255,0,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #final-cta h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3rem, 6vw, 6rem);
+    text-transform: uppercase;
+    line-height: 0.92;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  #final-cta h2 em {
+    font-style: normal;
+    color: var(--accent);
+    display: block;
+  }
+  #final-cta p {
+    font-size: 1.1rem;
+    color: #888;
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-final {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--accent);
+    padding: 1.2rem 3.5rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-final:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(232,255,0,0.35);
+  }
+  .btn-final::after { content: ' →'; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 5rem;
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  footer a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  footer a:hover { color: var(--accent); }
+
+  /* ── ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 7rem 1.5rem 4rem; }
+    .hero-right { display: none; }
+    #problem, #solution, #proof, #offer, #faq, #final-cta { padding: 5rem 1.5rem; }
+    .problem-grid, .offer-grid, .case-study { grid-template-columns: 1fr; gap: 2rem; }
+    .solution-grid { grid-template-columns: 1fr; }
+    .faq-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+    .proof-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .case-study { padding: 2rem 1.5rem; }
+    .hero-stats { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">JA<span>Training</span></div>
+  <a href="https://calendly.com/jatraining/videollamada-jatraining" target="_blank" class="cta-nav">Reservar llamada gratuita</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Entrenamiento online de ciclismo</div>
+    <h1>Entrena con<em>datos.</em>Rinde más.</h1>
+    <p class="hero-sub">Planificación personalizada con metodología iLevels, seguimiento diario en TrainingPeaks y nutrición deportiva integrada para ciclistas amateur competitivos.</p>
+    <a href="https://calendly.com/jatraining/videollamada-jatraining" target="_blank" class="btn-primary">Llamada gratuita de 20 min</a>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <strong>+40W</strong>
+        <span>FTP medio</span>
+      </div>
+      <div class="stat-item">
+        <strong>9</strong>
+        <span>Zonas iLevels</span>
+      </div>
+      <div class="stat-item">
+        <strong>5/7</strong>
+        <span>Días de soporte</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-noise"></div>
+    <div class="hero-visual">
+      <div class="power-meter">
+        <div class="watt-display">287W</div>
+        <div class="watt-unit">Potencia media · FTP</div>
+        <div class="progress-bars">
+          <div class="pbar-row">
+            <div class="pbar-label">CTL <span>82</span></div>
+            <div class="pbar-track"><div class="pbar-fill" style="--w:82%"></div></div>
+          </div>
+          <div class="pbar-row">
+            <div class="pbar-label">VO₂max <span>71 ml/kg/min</span></div>
+            <div class="pbar-track"><div class="pbar-fill" style="--w:71%;animation-delay:0.3s"></div></div>
+          </div>
+          <div class="pbar-row">
+            <div class="pbar-label">TSB <span>+12</span></div>
+            <div class="pbar-track"><div class="pbar-fill" style="--w:60%;animation-delay:0.6s"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="section-tag">El problema</div>
+  <h2 class="section-title">¿Te suena<em>alguna de estas?</em></h2>
+  <div class="problem-grid reveal">
+    <div class="problem-list">
+      <div class="problem-item">
+        <div class="problem-icon">📉</div>
+        <p><strong>Tu FTP lleva meses estancado</strong>Entrenas duro pero los números no mejoran. El volumen no es el problema: es la falta de estructura.</p>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">🎯</div>
+        <p><strong>Entrenas sin objetivos reales</strong>Sigues Strava, te comparas, acumulas kilómetros… pero no hay un plan detrás que lleve a algún sitio concreto.</p>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">🍝</div>
+        <p><strong>La nutrición es un caos</strong>No sabes qué comer antes, durante ni después de cada entrenamiento. Llegas a competición sin haber periodizado nada.</p>
+      </div>
+      <div class="problem-item">
+        <div class="problem-icon">😴</div>
+        <p><strong>No sabes cuándo recuperar</strong>Entrenas cuando toca y cuando no toca. CTL, ATL, TSB son letras que no usas para nada.</p>
+      </div>
+    </div>
+    <div class="problem-quote">
+      <blockquote>"Antes entrenaba 12 horas semanales y no mejoraba. Con Jose, en 4 meses subí 40W de FTP y mi VO₂max pasó de 63 a 71 ml/kg/min entrenando menos horas."</blockquote>
+      <cite>— <strong>Darío</strong>, ciclista amateur · 4 meses de entrenamiento</cite>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="section-tag">La solución</div>
+  <h2 class="section-title">Entrenamiento<em>basado en datos</em></h2>
+  <div class="solution-grid reveal">
+    <div class="sol-card">
+      <div class="sol-num">01</div>
+      <div class="sol-icon">⚡</div>
+      <h3>Plan iLevels personalizado</h3>
+      <p>Planificación semanal basada en las <strong>9 zonas de intensidad</strong> de la metodología Coggan. Cada entrenamiento tiene un objetivo fisiológico claro: no solo "tirar kilómetros".</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">📊</div>
+      <div class="sol-num">02</div>
+      <h3>Seguimiento diario en TrainingPeaks</h3>
+      <p>Análisis de cada entrenamiento con <strong>WKO5</strong>. Cuenta Premium de TrainingPeaks incluida. Ves en tiempo real cómo evoluciona tu CTL, ATL y forma.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">🥗</div>
+      <div class="sol-num">03</div>
+      <h3>Nutrición integrada (INDYA)</h3>
+      <p>Planificación pre/intra/post entreno adaptada a cada sesión. <strong>Sincronizado con TrainingPeaks y Strava</strong>. Ajustes semanales según carga real.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">💬</div>
+      <div class="sol-num">04</div>
+      <h3>Soporte diario L–V</h3>
+      <p>WhatsApp de lunes a viernes de 8 a 11h. Cambios de entrenamientos, dudas, ajustes de última hora. <strong>No eres un número</strong> en una lista de clientes.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">📈</div>
+      <div class="sol-num">05</div>
+      <h3>Informes de rendimiento</h3>
+      <p>Cada 2 meses recibes un análisis completo de tu evolución: <strong>potencia, durabilidad, métricas fisiológicas</strong> y ajuste de objetivos para el siguiente bloque.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">🏋️</div>
+      <div class="sol-num">06</div>
+      <h3>Fuerza + guías prácticas</h3>
+      <p>Entrenamiento de fuerza con vídeos explicativos. Guías de suplementación, nutrición, estrategia de carrera. <strong>Todo lo que necesitas en un solo sitio.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section id="proof">
+  <div class="proof-header reveal">
+    <div>
+      <div class="section-tag">Caso real</div>
+      <h2 class="section-title">Resultados<em>medibles</em></h2>
+    </div>
+  </div>
+  <div class="case-study reveal">
+    <div>
+      <div class="case-label">Cliente · 4 meses de programa</div>
+      <div class="case-name">Darío</div>
+      <p class="case-story">Ciclista amateur de 38 años. Llevaba 2 temporadas estancado en el mismo FTP a pesar de entrenar más de 10h semanales. El problema: demasiado volumen en zonas incorrectas, sin periodización y sin control de la nutrición.</p>
+      <p class="case-story">Con el programa JATRAINING redujimos el volumen total, estructuramos los bloques por fases y periodizamos la nutrición por sesión. Resultado en 4 meses:</p>
+      <div class="case-metrics">
+        <div class="metric-box">
+          <div class="metric-before">FTP Antes</div>
+          <div class="metric-value muted">247W</div>
+          <div class="metric-label">Potencia umbral</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-before">FTP Después</div>
+          <div class="metric-value accent">287W</div>
+          <div class="metric-delta">+40W / +16%</div>
+          <div class="metric-label">Potencia umbral</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-before">VO₂max Antes</div>
+          <div class="metric-value muted">63</div>
+          <div class="metric-label">ml/kg/min</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-before">VO₂max Después</div>
+          <div class="metric-value accent">71</div>
+          <div class="metric-delta">+8 ml/kg/min</div>
+          <div class="metric-label">ml/kg/min</div>
+        </div>
+      </div>
+    </div>
+    <div class="case-visual">
+      <div class="progress-chart">
+        <div class="chart-title">Evolución FTP · 4 meses</div>
+        <div class="chart-bars">
+          <div class="chart-bar" style="height:70%"><span>M1</span></div>
+          <div class="chart-bar" style="height:75%"><span>M2</span></div>
+          <div class="chart-bar" style="height:85%"><span>M3</span></div>
+          <div class="chart-bar" style="height:100%"><span>M4</span></div>
+        </div>
+      </div>
+      <div style="background:var(--black);border:1px solid var(--border);padding:2rem;">
+        <div class="chart-title" style="margin-bottom:1rem;">Horas semanales</div>
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.8rem;">
+          <div style="width:100%;background:var(--border);height:6px;position:relative;">
+            <div style="width:90%;height:100%;background:#cc2200;"></div>
+          </div>
+          <span style="font-family:'Barlow Condensed';font-size:0.85rem;white-space:nowrap;color:#cc2200;">12h antes</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <div style="width:100%;background:var(--border);height:6px;position:relative;">
+            <div style="width:65%;height:100%;background:var(--accent);"></div>
+          </div>
+          <span style="font-family:'Barlow Condensed';font-size:0.85rem;white-space:nowrap;color:var(--accent);">8h después</span>
+        </div>
+        <p style="font-size:0.75rem;color:var(--muted);margin-top:1rem;line-height:1.5;">Menos volumen. Mejor estructura. Más adaptación.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section id="offer">
+  <div class="section-tag">El programa</div>
+  <h2 class="section-title">Qué incluye<em>tu plan</em></h2>
+  <div class="offer-grid reveal">
+    <div class="offer-includes">
+      <div class="offer-item">
+        <div class="offer-dot"></div>
+        <div>
+          <div class="offer-item-title">Plan de entrenamiento 100% personalizado</div>
+          <div class="offer-item-desc">Diseñado desde cero según tus objetivos, nivel actual, disponibilidad horaria y calendario de competiciones. Metodología iLevels (9 zonas) con progresión estructurada.</div>
+        </div>
+      </div>
+      <div class="offer-item">
+        <div class="offer-dot"></div>
+        <div>
+          <div class="offer-item-title">TrainingPeaks Premium incluido</div>
+          <div class="offer-item-desc">Cuenta Premium de TrainingPeaks sin coste adicional. Análisis de rendimiento con WKO5: potencia normalizada, distribución de zonas, carga aguda y crónica.</div>
+        </div>
+      </div>
+      <div class="offer-item">
+        <div class="offer-dot"></div>
+        <div>
+          <div class="offer-item-title">Nutrición intra-entrenamiento</div>
+          <div class="offer-item-desc">Pautas claras de qué comer y cuánto en cada entrenamiento. Periodización nutricional por sesión adaptada a la carga del día.</div>
+        </div>
+      </div>
+      <div class="offer-item">
+        <div class="offer-dot"></div>
+        <div>
+          <div class="offer-item-title">Soporte diario de lunes a viernes</div>
+          <div class="offer-item-desc">WhatsApp de 8 a 11h. Cambios de último momento, dudas sobre ejecución, ajuste de entrenamientos por cansancio o imprevistos.</div>
+        </div>
+      </div>
+      <div class="offer-item">
+        <div class="offer-dot"></div>
+        <div>
+          <div class="offer-item-title">Informe de rendimiento cada 2 meses</div>
+          <div class="offer-item-desc">Análisis detallado de tu evolución: métricas de potencia, VO₂max estimado, distribución de carga y ajuste de objetivos para el siguiente bloque.</div>
+        </div>
+      </div>
+      <div class="offer-item">
+        <div class="offer-dot"></div>
+        <div>
+          <div class="offer-item-title">Entrenamiento de fuerza + guías</div>
+          <div class="offer-item-desc">Plan de fuerza con vídeos explicativos. Guías descargables de suplementación, estrategia de carrera y nutrición competición.</div>
+        </div>
+      </div>
+      <div class="offer-item">
+        <div class="offer-dot"></div>
+        <div>
+          <div class="offer-item-title">Nutrición deportiva completa (opcional)</div>
+          <div class="offer-item-desc">Plan nutricional de 5–6 semanas vía app INDYA. Revisiones semanales, sincronización con TrainingPeaks y Strava. Ajuste de macros por carga de entrenamiento.</div>
+        </div>
+      </div>
+    </div>
+    <div class="offer-cta-box">
+      <h3>Empieza con una llamada gratuita</h3>
+      <p>20 minutos. Sin compromiso. Analizamos tu situación y te digo exactamente qué necesitas mejorar.</p>
+      <div class="price">Gratis</div>
+      <div class="price-sub">Videollamada de diagnóstico · 20 min</div>
+      <a href="https://calendly.com/jatraining/videollamada-jatraining" target="_blank" class="btn-cta-box">Reservar mi llamada →</a>
+      <p class="offer-note">Sin tarjeta. Sin compromiso.<br>Si no encajamos, te llevas claridad de todos modos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-tag">Preguntas frecuentes</div>
+  <h2 class="section-title">Dudas<em>comunes</em></h2>
+  <div class="faq-grid reveal">
+    <div class="faq-item">
+      <div class="faq-q">¿Necesito un potenciómetro?</div>
+      <div class="faq-a">Es muy recomendable pero no imprescindible para empezar. Podemos trabajar con FC y RPE en un primer momento, aunque la metodología iLevels está diseñada para rendir al máximo con datos de potencia.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Cuántas horas debo entrenar?</div>
+      <div class="faq-a">El plan se adapta completamente a tu disponibilidad real. Trabajamos con lo que tienes, no con lo que sería ideal. Muchos ciclistas mejoran más entrenando menos pero mejor estructurado.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Qué pasa si no tengo experiencia con TrainingPeaks?</div>
+      <div class="faq-a">Cero problema. Al inicio del programa te guío paso a paso para configurar tu cuenta y entender los datos. En una semana ya sabrás leer tu PMC y entender tu carga de entrenamiento.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Y si viajo o tengo semanas con poco tiempo?</div>
+      <div class="faq-a">Es parte del trabajo. El soporte diario existe exactamente para eso: ajustamos los entrenamientos a tu realidad semanal. El plan no es rígido, respira contigo.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿La nutrición es obligatoria?</div>
+      <div class="faq-a">No. El servicio de nutrición completa con INDYA es opcional y complementario al plan de entrenamiento. Hay ciclistas que solo quieren el entrenamiento, y es perfectamente válido.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Cuánto tiempo tarda en verse resultados?</div>
+      <div class="faq-a">Los primeros cambios en sensaciones se notan en 3–4 semanas. Mejoras medibles en potencia y métricas fisiológicas típicamente en 8–12 semanas de trabajo consistente.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="final-cta">
+  <h2>¿Listo para<em>subir de nivel?</em></h2>
+  <p>Una llamada de 20 minutos puede cambiar toda tu temporada. Sin compromiso, sin tarjeta. Solo claridad.</p>
+  <a href="https://calendly.com/jatraining/videollamada-jatraining" target="_blank" class="btn-final">Reservar llamada gratuita</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="logo" style="font-size:1rem;">JA<span style="color:var(--white)">Training</span></p>
+  <p>© 2025 JATRAINING · <a href="https://instagram.com/josearribastraining" target="_blank">@josearribastraining</a></p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Animate chart bars on scroll
+  const chartBars = document.querySelectorAll('.chart-bar');
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.transition = 'height 0.8s ease';
+        barObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  chartBars.forEach(b => barObserver.observe(b));
+</script>
+
+</body>
+</html>
