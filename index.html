@@ -152,15 +152,11 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(232,255,0,0.3);
   }
-  .btn-primary::after {
-    content: '→';
-    margin-left: 0.6rem;
-    font-weight: 900;
-    font-size: 1.6em;
-    -webkit-text-stroke: 1.4px var(--black);
-    display: inline-block;
-    transform: scaleX(1.6);
-    transform-origin: left center;
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; }
+  .btn-primary .btn-icon {
+    width: 1.4em;
+    height: 1.4em;
+    flex-shrink: 0;
   }
 
   .hero-stats {
@@ -964,7 +960,7 @@
     <div class="hero-tag">Entrenamiento online de ciclismo</div>
     <h1>Entrena con<em>datos.</em>Rinde más.</h1>
     <p class="hero-sub">Planificación personalizada con metodología iLevels, seguimiento diario en TrainingPeaks y nutrición deportiva integrada para ciclistas amateur competitivos.</p>
-    <a href="https://calendly.com/jatraining/videollamada-jatraining" target="_blank" class="btn-primary">Llamada gratuita</a>
+    <a href="https://calendly.com/jatraining/videollamada-jatraining" target="_blank" class="btn-primary">Reservar llamada gratuita<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="13" height="12" rx="2.5"/><path d="M15 10.5l6-3.5v10l-6-3.5z"/></svg></a>
     <div class="hero-stats">
       <div class="stat-item">
         <strong>DE L-V </strong>
