@@ -709,7 +709,10 @@
     margin-bottom: 2rem;
   }
   .btn-cta-box {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
     text-align: center;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
@@ -724,6 +727,7 @@
     margin-bottom: 1rem;
   }
   .btn-cta-box:hover { opacity: 0.85; transform: translateY(-2px); }
+  .btn-cta-box .btn-icon { width: 1.4em; height: 1.4em; flex-shrink: 0; }
   .offer-note {
     font-size: 0.75rem;
     color: var(--muted);
@@ -1115,7 +1119,7 @@
       <p>20 minutos. Sin compromiso. Analizamos tu situación y te digo exactamente qué necesitas mejorar.</p>
       <div class="price">Gratis</div>
       <div class="price-sub">Videollamada de diagnóstico · 20 min</div>
-      <a href="https://calendly.com/jatraining/videollamada-jatraining" target="_blank" class="btn-cta-box">Reservar mi llamada →</a>
+      <a href="https://calendly.com/jatraining/videollamada-jatraining" target="_blank" class="btn-cta-box">Reservar videollamada gratuita<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="13" height="12" rx="2.5"/><path d="M15 10.5l6-3.5v10l-6-3.5z"/></svg></a>
       <p class="offer-note">Sin tarjeta. Sin compromiso.<br>Si no encajamos, te llevas claridad de todos modos.</p>
     </div>
   </div>
