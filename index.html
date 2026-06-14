@@ -861,12 +861,26 @@
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     #hero { grid-template-columns: 1fr; }
-    .hero-left { padding: 7rem 1.5rem 4rem; }
-<<<<<<< HEAD
-    .hero-right { display: block; min-height: 320px; }
-=======
+    .hero-left {
+      padding: 7rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Ciclista semitransparente de fondo, detrás del título (solo móvil) */
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("hero.jpg") center center / cover no-repeat;
+      opacity: 0.18;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-left > * {
+      position: relative;
+      z-index: 1;
+    }
     .hero-right { display: none; }
->>>>>>> 63c6cf2 (Añadir logo (color y blanco) en la cabecera)
     #problem, #solution, #proof, #offer, #faq, #final-cta { padding: 5rem 1.5rem; }
     .problem-grid, .offer-grid, .case-study { grid-template-columns: 1fr; gap: 2rem; }
     .solution-grid { grid-template-columns: 1fr; }
@@ -908,10 +922,7 @@
   </div>
   <div class="hero-right">
     <div class="hero-noise"></div>
-<<<<<<< HEAD
     <img src="hero.jpg" alt="Ciclista de ciclocross en competición" class="hero-photo">
-=======
->>>>>>> 63c6cf2 (Añadir logo (color y blanco) en la cabecera)
   </div>
 </section>
 
